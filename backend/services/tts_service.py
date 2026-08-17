@@ -5,10 +5,10 @@ import sys
 from pathlib import Path
 from typing import Optional, Dict, Any
 
-# Root directory of the project
-ROOT_DIR = Path(__file__).parent.parent.parent
-CONFIG_PATH = ROOT_DIR / "channels.json"
-OUTPUT_DIR = ROOT_DIR / "outputs"
+# Backend directory
+BACKEND_DIR = Path(__file__).parent.parent
+CONFIG_PATH = BACKEND_DIR / "channels.json"
+OUTPUT_DIR = BACKEND_DIR / "outputs"
 OUTPUT_DIR.mkdir(exist_ok=True)
 
 DEFAULT_CONFIG = {
