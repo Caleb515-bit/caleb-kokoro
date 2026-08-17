@@ -1,0 +1,18 @@
+{
+  "frontline_files": {
+    "engine": "chatterbox",
+    "voice": "narrator_ref.wav"
+  },
+  "trivia": {
+    "engine": "kokoro",
+    "voice": "af_heart"
+  },
+  "kcaleb": {
+    "engine": "chatterbox",
+    "voice": "archivist_ref.wav"
+  },
+  "_default": {
+    "engine": "kokoro",
+    "voice": "af_heart"
+  }
+}

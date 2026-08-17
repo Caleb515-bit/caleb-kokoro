@@ -1,0 +1,27 @@
+node_modules/
+venv/
+__pycache__/
+*.pyc
+.env
+.env.local
+
+# Frontend build
+frontend/dist/
+
+# Backend outputs
+outputs/
+
+# Mobile (has its own repo)
+mobile/
+
+# Binary files
+cli_test.wav
+*.apk
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
