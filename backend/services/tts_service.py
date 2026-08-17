@@ -23,16 +23,31 @@ def load_config() -> Dict[str, Any]:
         CONFIG_PATH.write_text(json.dumps(DEFAULT_CONFIG, indent=2))
     return json.loads(CONFIG_PATH.read_text())
 
+def ensure_model_files():
+    import subprocess as _sp
+    model_dir = Path.home() / ".cache" / "kokoro"
+    model_path = model_dir / "kokoro-v1.0.onnx"
+    voices_path = model_dir / "voices-v1.0.bin"
+    needs_download = (
+        not model_path.exists() or model_path.stat().st_size < 1000000
+        or not voices_path.exists() or voices_path.stat().st_size < 100000
+    )
+    if needs_download:
+        model_dir.mkdir(parents=True, exist_ok=True)
+        script = BACKEND_DIR / "setup_model.sh"
+        if script.exists():
+            _sp.run(["bash", str(script)], check=True, timeout=600)
+        else:
+            raise FileNotFoundError(f"Model files missing and setup script not found at {script}")
+    return model_dir
+
 async def run_kokoro(text: str, voice: str, out_path: Path):
     from kokoro_onnx import Kokoro
     import soundfile as sf
     
-    model_dir = Path.home() / ".cache" / "kokoro"
+    model_dir = ensure_model_files()
     model_path = model_dir / "kokoro-v1.0.onnx"
     voices_path = model_dir / "voices-v1.0.bin"
-
-    if not model_path.exists() or not voices_path.exists():
-        raise FileNotFoundError(f"Kokoro model files not found in {model_dir}. Run setup_kokoro.sh.")
 
     kokoro = Kokoro(str(model_path), str(voices_path))
     # Kokoro-onnx's create is synchronous, but we can wrap it or just run it
