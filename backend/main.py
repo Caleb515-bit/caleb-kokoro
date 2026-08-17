@@ -30,8 +30,13 @@ async def ensure_model():
     voices_path = model_dir / "voices-v1.0.bin"
     if not model_path.exists() or not voices_path.exists():
         print("Model files missing, downloading...")
-        subprocess.run(["bash", str(Path(__file__).parent / "setup_model.sh")], check=True)
-        print("Model download complete.")
+        try:
+            subprocess.run(["bash", str(Path(__file__).parent / "setup_model.sh")], check=True, timeout=300)
+            print("Model download complete.")
+        except Exception as e:
+            print(f"WARNING: Model download failed: {e}. Server will start but kokoro engine may not work.")
+    else:
+        print("Model files already present.")
 
 class SynthesisRequest(BaseModel):
     text: str
